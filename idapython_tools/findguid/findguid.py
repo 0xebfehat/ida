@@ -25,13 +25,16 @@ def make_binary_pattern(guid):
     # sample guid: 0F87369F-A4E5-4CFC-BD3E-73E6154572DD
     tmp = guid.split('-')
     data = ''
-    data += struct.pack('<L', int(tmp[0], 16))
-    data += struct.pack('<H', int(tmp[1], 16))
-    data += struct.pack('<H', int(tmp[2], 16))
-    data += struct.pack('>H', int(tmp[3], 16))
-    data += binascii.a2b_hex(tmp[4])
-
-    binary_pattern = ' '.join(map(binascii.b2a_hex, list(data)))
+    data = struct.pack('<L', int(tmp[0], 16)).hex()
+    data += struct.pack('<H', int(tmp[1], 16)).hex()
+    data += struct.pack('<H', int(tmp[2], 16)).hex()
+    data += struct.pack('>H', int(tmp[3], 16)).hex()
+    data += tmp[4]
+    byte_array = bytearray.fromhex(data)
+    byte_list = list()
+    for i in byte_array:
+        byte_list.append('{:02X}'.format(i))
+    binary_pattern = ' '.join(byte_list)
     return binary_pattern
 
 def main():
